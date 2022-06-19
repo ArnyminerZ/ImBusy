@@ -62,7 +62,6 @@ class _MemberItemState extends State<MemberItem> {
             ],
           ),
           const Spacer(),
-          Button
         ],
       ),
     );
