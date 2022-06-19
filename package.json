@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/ArnyminerZ/ImBusy/issues"
   },
-  "homepage": "https://github.com/ArnyminerZ/ImBusy#readme"
+  "homepage": "https://github.com/ArnyminerZ/ImBusy#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
 }
