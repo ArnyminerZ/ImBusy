@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
         foregroundColor: colorScheme.onSurfaceVariant,
         centerTitle: true,
       ),
-      bottomSheet: const Footer(),
+      bottomSheet: footer(context),
       body: Row(
         children: <Widget>[
           NavigationRail(
