@@ -1,6 +1,7 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
-import 'package:imbusy_app/widgets/right_panel.dart';
+
+import 'components/footer.dart';
 
 void main() {
   runApp(const ImBusyApp());
@@ -51,6 +52,7 @@ class _HomePageState extends State<HomePage> {
         foregroundColor: colorScheme.onSurfaceVariant,
         centerTitle: true,
       ),
+      bottomSheet: const Footer(),
       body: Row(
         children: <Widget>[
           NavigationRail(
@@ -95,9 +97,9 @@ class _HomePageState extends State<HomePage> {
               child: Text('selectedIndex: $_selectedIndex'),
             ),
           ),
-          const RightPanel(
-            eventName: "Event Name",
-          ),
+          // const RightPanel(
+          //   eventName: "Event Name",
+          // ),
         ],
       ),
     );
