@@ -3,9 +3,11 @@ import 'dart:math';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
+import 'package:imbusy_app/data/busy_dates.dart';
 import 'package:imbusy_app/data/event_data.dart';
 import 'package:imbusy_app/data/member_data.dart';
 import 'package:imbusy_app/enum/confirmation_state.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 import 'components/footer.dart';
 import 'widgets/right_panel.dart';
@@ -58,6 +60,35 @@ class _HomePageState extends State<HomePage> {
     ThemeData theme = Theme.of(context);
     ColorScheme colorScheme = theme.colorScheme;
 
+    DateTime now = DateTime.now();
+
+    EventData eventData = EventData(
+      name: "Event Name",
+      members: List.generate(
+        4,
+        (index) => MemberData(
+          name: faker.person.name(),
+          confirmationState: index == 0
+              ? ConfirmationState.confirmed
+              : ConfirmationState
+                  .values[random(0, ConfirmationState.values.length)],
+          role: index == 0 ? Role.organizer : Role.member,
+          profileUri: "",
+        ),
+      ),
+      busyDates: List.generate(
+        random(1, 10),
+        (_) {
+          DateTime start = DateTime(now.year, now.month, random(0, 30));
+          return BusyDates(
+            start: start,
+            end: start.add(Duration(days: random(0, 5))),
+            userUid: faker.guid.guid(),
+          );
+        },
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("I'm Busy"),
@@ -107,25 +138,25 @@ class _HomePageState extends State<HomePage> {
           // This is the main content.
           Expanded(
             child: Center(
-              child: Text('selectedIndex: $_selectedIndex'),
+              child: TableCalendar<BusyDates>(
+                firstDay: now,
+                lastDay: DateTime.utc(now.year + 10, 12, 31),
+                focusedDay: now,
+                eventLoader: (day) {
+                  List<BusyDates> list = [];
+                  for (var element in eventData.busyDates) {
+                    if (element.start.day == day.day &&
+                        element.start.month == day.month) {
+                      list.add(element);
+                    }
+                  }
+                  return list;
+                },
+              ),
             ),
           ),
           RightPanel(
-            event: EventData(
-              name: "Event Name",
-              members: List.generate(
-                4,
-                (index) => MemberData(
-                  name: faker.person.name(),
-                  confirmationState: index == 0
-                      ? ConfirmationState.confirmed
-                      : ConfirmationState
-                          .values[random(0, ConfirmationState.values.length)],
-                  role: index == 0 ? Role.organizer : Role.member,
-                  profileUri: "",
-                ),
-              ),
-            ),
+            event: eventData,
           ),
         ],
       ),
