@@ -1,7 +1,18 @@
+import 'dart:math';
+
 import 'package:dynamic_color/dynamic_color.dart';
+import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
+import 'package:imbusy_app/data/event_data.dart';
+import 'package:imbusy_app/data/member_data.dart';
+import 'package:imbusy_app/enum/confirmation_state.dart';
 
 import 'components/footer.dart';
+import 'widgets/right_panel.dart';
+
+int random(min, max) {
+  return min + Random().nextInt(max - min);
+}
 
 void main() {
   runApp(const ImBusyApp());
@@ -42,6 +53,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    Faker faker = Faker();
+
     ThemeData theme = Theme.of(context);
     ColorScheme colorScheme = theme.colorScheme;
 
@@ -97,9 +110,23 @@ class _HomePageState extends State<HomePage> {
               child: Text('selectedIndex: $_selectedIndex'),
             ),
           ),
-          // const RightPanel(
-          //   eventName: "Event Name",
-          // ),
+          RightPanel(
+            event: EventData(
+              name: "Event Name",
+              members: List.generate(
+                4,
+                (index) => MemberData(
+                  name: faker.person.name(),
+                  confirmationState: index == 0
+                      ? ConfirmationState.confirmed
+                      : ConfirmationState
+                          .values[random(0, ConfirmationState.values.length)],
+                  role: index == 0 ? Role.organizer : Role.member,
+                  profileUri: "",
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
