@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:imbusy_app/data/busy_dates.dart';
 import 'package:imbusy_app/data/event_data.dart';
 import 'package:imbusy_app/data/member_data.dart';
@@ -36,6 +38,15 @@ class ImBusyApp extends StatelessWidget {
           darkTheme: ThemeData(
             colorScheme: darkDynamic,
           ),
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('en', ''),
+          ],
           home: const HomePage(),
         );
       },
@@ -59,6 +70,8 @@ class _HomePageState extends State<HomePage> {
 
     ThemeData theme = Theme.of(context);
     ColorScheme colorScheme = theme.colorScheme;
+
+    AppLocalizations localizations = AppLocalizations.of(context)!;
 
     DateTime now = DateTime.now();
 
@@ -111,26 +124,26 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {},
               child: const Icon(Icons.add_rounded),
             ),
-            destinations: const <NavigationRailDestination>[
+            destinations: <NavigationRailDestination>[
               NavigationRailDestination(
-                icon: Icon(Icons.calendar_today_outlined),
-                selectedIcon: Icon(Icons.calendar_today_rounded),
-                label: Text('Calendar'),
+                icon: const Icon(Icons.calendar_today_outlined),
+                selectedIcon: const Icon(Icons.calendar_today_rounded),
+                label: Text(localizations.menu_calendar),
               ),
               NavigationRailDestination(
-                icon: Icon(Icons.people_alt_outlined),
-                selectedIcon: Icon(Icons.people_alt),
-                label: Text('Members'),
+                icon: const Icon(Icons.people_alt_outlined),
+                selectedIcon: const Icon(Icons.people_alt),
+                label: Text(localizations.menu_members),
               ),
               NavigationRailDestination(
-                icon: Icon(Icons.dashboard_outlined),
-                selectedIcon: Icon(Icons.dashboard),
-                label: Text('Summary'),
+                icon: const Icon(Icons.dashboard_outlined),
+                selectedIcon: const Icon(Icons.dashboard),
+                label: Text(localizations.menu_summary),
               ),
               NavigationRailDestination(
-                icon: Icon(Icons.settings_outlined),
-                selectedIcon: Icon(Icons.settings),
-                label: Text('Settings'),
+                icon: const Icon(Icons.settings_outlined),
+                selectedIcon: const Icon(Icons.settings),
+                label: Text(localizations.menu_settings),
               ),
             ],
           ),

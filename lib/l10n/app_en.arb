@@ -1,0 +1,18 @@
+{
+  "menu_calendar": "Calendar",
+  "@menu_calendar": {
+    "description": "The menu item that chooses the calendar page."
+  },
+  "menu_members": "Members",
+  "@menu_members": {
+    "description": "The menu item that chooses the event members list page."
+  },
+  "menu_summary": "Summary",
+  "@menu_summary": {
+    "description": "The menu item that chooses the event summary page."
+  },
+  "menu_settings": "Settings",
+  "@menu_settings": {
+    "description": "The menu item that chooses the event settings page."
+  }
+}
