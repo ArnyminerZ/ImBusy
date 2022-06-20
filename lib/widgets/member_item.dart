@@ -9,7 +9,7 @@ Widget _memberItemText(
     Text(
       isTitle ? memberData.name : memberData.role.displayName(),
       overflow: TextOverflow.ellipsis,
-      style: textTheme.bodySmall?.copyWith(
+      style: (isTitle ? textTheme.labelLarge : textTheme.bodySmall)?.copyWith(
         fontStyle: memberData.confirmationState == ConfirmationState.confirmed
             ? FontStyle.normal
             : FontStyle.italic,
