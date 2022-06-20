@@ -1,12 +1,12 @@
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
-import 'package:imbusy_app/enum/confirmation_state.dart';
+import 'package:imbusy_app/data/event_data.dart';
 import 'package:imbusy_app/widgets/member_item.dart';
 
 class RightPanel extends StatefulWidget {
-  const RightPanel({Key? key, required this.eventName}) : super(key: key);
+  const RightPanel({Key? key, required this.event}) : super(key: key);
 
-  final String eventName;
+  final EventData event;
 
   @override
   State<RightPanel> createState() => _RightPanelState();
@@ -20,6 +20,8 @@ class _RightPanelState extends State<RightPanel> {
     ThemeData theme = Theme.of(context);
     TextTheme textTheme = theme.textTheme;
 
+    EventData event = widget.event;
+
     return Card(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(12.0)),
@@ -32,7 +34,7 @@ class _RightPanelState extends State<RightPanel> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                widget.eventName,
+                event.name,
                 style: textTheme.titleLarge,
               ),
               const SizedBox(height: 12.0),
@@ -43,20 +45,10 @@ class _RightPanelState extends State<RightPanel> {
                     "Members",
                     style: textTheme.labelLarge,
                   ),
-                  MemberItem(
-                    name: faker.person.name(),
-                    role: "Organizer",
-                    state: ConfirmationState.confirmed,
-                  ),
-                  MemberItem(
-                    name: faker.person.name(),
-                    role: "Member",
-                    state: ConfirmationState.unconfirmed,
-                  ),
-                  MemberItem(
-                    name: faker.person.name(),
-                    role: "Member",
-                    state: ConfirmationState.denied,
+                  ...event.members.map(
+                    (member) => MemberItem(
+                      member: member,
+                    ),
                   ),
                 ],
               ),
