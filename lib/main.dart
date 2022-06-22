@@ -2,10 +2,13 @@ import 'dart:math';
 
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:faker/faker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:imbusy_app/components/login_form.dart';
 import 'package:imbusy_app/data/busy_dates.dart';
 import 'package:imbusy_app/data/event_data.dart';
 import 'package:imbusy_app/data/member_data.dart';
@@ -70,6 +73,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
+  User? _user;
+
   @override
   Widget build(BuildContext context) {
     Faker faker = Faker();
@@ -108,6 +113,20 @@ class _HomePageState extends State<HomePage> {
       ),
     );
 
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      setState(() {
+        _user = user;
+      });
+
+      if (kDebugMode) {
+        if (user == null) {
+          print('User is currently signed out!');
+        } else {
+          print('User is signed in!');
+        }
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("I'm Busy"),
@@ -117,70 +136,77 @@ class _HomePageState extends State<HomePage> {
       ),
       bottomSheet: footer(context),
       body: Row(
-        children: <Widget>[
-          NavigationRail(
-            selectedIndex: _selectedIndex,
-            onDestinationSelected: (int index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
-            labelType: NavigationRailLabelType.selected,
-            leading: FloatingActionButton(
-              onPressed: () {},
-              child: const Icon(Icons.add_rounded),
-            ),
-            destinations: <NavigationRailDestination>[
-              NavigationRailDestination(
-                icon: const Icon(Icons.calendar_today_outlined),
-                selectedIcon: const Icon(Icons.calendar_today_rounded),
-                label: Text(localizations.menu_calendar),
-              ),
-              NavigationRailDestination(
-                icon: const Icon(Icons.people_alt_outlined),
-                selectedIcon: const Icon(Icons.people_alt),
-                label: Text(localizations.menu_members),
-              ),
-              NavigationRailDestination(
-                icon: const Icon(Icons.dashboard_outlined),
-                selectedIcon: const Icon(Icons.dashboard),
-                label: Text(localizations.menu_summary),
-              ),
-              NavigationRailDestination(
-                icon: const Icon(Icons.settings_outlined),
-                selectedIcon: const Icon(Icons.settings),
-                label: Text(localizations.menu_settings),
-              ),
-            ],
-          ),
-          const VerticalDivider(thickness: 1, width: 1),
-          // This is the main content.
-          Expanded(
-            child: Center(
-              child: _selectedIndex == 0
-                  ? TableCalendar<BusyDates>(
-                      firstDay: now,
-                      lastDay: DateTime.utc(now.year + 10, 12, 31),
-                      focusedDay: now,
-                      eventLoader: (day) {
-                        List<BusyDates> list = [];
-                        for (var element in eventData.busyDates) {
-                          if (element.start.day == day.day &&
-                              element.start.month == day.month) {
-                            list.add(element);
-                          }
-                        }
-                        return list;
-                      },
-                    )
-                  : const Text("Sup?"),
-            ),
-          ),
-          if (_selectedIndex == 0)
-            RightPanel(
-              event: eventData,
-            ),
-        ],
+        children: _user != null
+            ? <Widget>[
+                NavigationRail(
+                  selectedIndex: _selectedIndex,
+                  onDestinationSelected: (int index) {
+                    setState(() {
+                      _selectedIndex = index;
+                    });
+                  },
+                  labelType: NavigationRailLabelType.selected,
+                  leading: FloatingActionButton(
+                    onPressed: () {},
+                    child: const Icon(Icons.add_rounded),
+                  ),
+                  destinations: <NavigationRailDestination>[
+                    NavigationRailDestination(
+                      icon: const Icon(Icons.calendar_today_outlined),
+                      selectedIcon: const Icon(Icons.calendar_today_rounded),
+                      label: Text(localizations.menu_calendar),
+                    ),
+                    NavigationRailDestination(
+                      icon: const Icon(Icons.people_alt_outlined),
+                      selectedIcon: const Icon(Icons.people_alt),
+                      label: Text(localizations.menu_members),
+                    ),
+                    NavigationRailDestination(
+                      icon: const Icon(Icons.dashboard_outlined),
+                      selectedIcon: const Icon(Icons.dashboard),
+                      label: Text(localizations.menu_summary),
+                    ),
+                    NavigationRailDestination(
+                      icon: const Icon(Icons.settings_outlined),
+                      selectedIcon: const Icon(Icons.settings),
+                      label: Text(localizations.menu_settings),
+                    ),
+                  ],
+                ),
+                const VerticalDivider(thickness: 1, width: 1),
+                // This is the main content.
+                Expanded(
+                  child: Center(
+                    child: _selectedIndex == 0
+                        ? TableCalendar<BusyDates>(
+                            firstDay: now,
+                            lastDay: DateTime.utc(now.year + 10, 12, 31),
+                            focusedDay: now,
+                            eventLoader: (day) {
+                              List<BusyDates> list = [];
+                              for (var element in eventData.busyDates) {
+                                if (element.start.day == day.day &&
+                                    element.start.month == day.month) {
+                                  list.add(element);
+                                }
+                              }
+                              return list;
+                            },
+                          )
+                        : const Text("Sup?"),
+                  ),
+                ),
+                if (_selectedIndex == 0)
+                  RightPanel(
+                    event: eventData,
+                  ),
+              ]
+            : <Widget>[
+                // When the user is not logged in
+                const Expanded(
+                  child: Center(child: LoginForm()),
+                ),
+              ],
       ),
     );
   }
