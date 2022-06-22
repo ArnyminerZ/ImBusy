@@ -891,3 +891,4 @@ DerivedData/
 # Ignore the configuration file since it includes sensitive information
 ios/firebase_app_id_file.json
 android/app/google-services.json
+/.flutter-plugins-dependencies
