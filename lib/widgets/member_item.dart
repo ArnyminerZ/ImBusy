@@ -48,14 +48,15 @@ Widget memberItem(BuildContext context, MemberData memberData) {
           ),
         ),
         const SizedBox(width: 8),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _memberItemText(true, memberData, context),
-            _memberItemText(false, memberData, context),
-          ],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _memberItemText(true, memberData, context),
+              _memberItemText(false, memberData, context),
+            ],
+          ),
         ),
-        const Spacer(),
         Tooltip(
           message: memberData.confirmationState.name(localizations),
           child: Padding(
