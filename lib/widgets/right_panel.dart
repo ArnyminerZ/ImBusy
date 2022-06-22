@@ -1,6 +1,8 @@
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:imbusy_app/data/event_data.dart';
+import 'package:imbusy_app/utils/string.dart';
 import 'package:imbusy_app/widgets/member_item.dart';
 
 class RightPanel extends StatefulWidget {
@@ -19,6 +21,8 @@ class _RightPanelState extends State<RightPanel> {
 
     ThemeData theme = Theme.of(context);
     TextTheme textTheme = theme.textTheme;
+
+    AppLocalizations localizations = AppLocalizations.of(context)!;
 
     EventData event = widget.event;
 
@@ -42,7 +46,7 @@ class _RightPanelState extends State<RightPanel> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Members",
+                    localizations.panel_title_members,
                     style: textTheme.labelLarge,
                   ),
                   ...event.members.map(
@@ -54,7 +58,7 @@ class _RightPanelState extends State<RightPanel> {
               ),
               const Spacer(),
               Text(
-                "Reference code: xxx",
+                localizations.event_reference_code.format(["xxx"]),
                 style: textTheme.labelSmall,
               )
             ],
