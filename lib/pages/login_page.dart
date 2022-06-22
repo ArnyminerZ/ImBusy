@@ -4,14 +4,14 @@ import 'package:flutter_signin_button/button_view.dart';
 import 'package:imbusy_app/firebase/auth.dart';
 import 'package:imbusy_app/utils/string.dart';
 
-class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _LoginFormState();
+  State<StatefulWidget> createState() => _LoginPageState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
 
   @override
