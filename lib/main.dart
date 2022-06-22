@@ -1,38 +1,31 @@
-import 'dart:math';
-
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:faker/faker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:imbusy_app/components/login_form.dart';
-import 'package:imbusy_app/data/busy_dates.dart';
-import 'package:imbusy_app/data/event_data.dart';
-import 'package:imbusy_app/data/member_data.dart';
-import 'package:imbusy_app/enum/confirmation_state.dart';
-import 'package:table_calendar/table_calendar.dart';
 
-import 'components/footer.dart';
 import 'firebase_options.dart';
-import 'widgets/right_panel.dart';
-
-int random(min, max) {
-  return min + Random().nextInt(max - min);
-}
+import 'pages/home_page.dart';
+import 'pages/login_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
   runApp(const ImBusyApp());
 }
 
-class ImBusyApp extends StatelessWidget {
+class ImBusyApp extends StatefulWidget {
   const ImBusyApp({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _ImBusyAppState();
+}
+
+class _ImBusyAppState extends State<ImBusyApp> {
+  final Future<FirebaseApp> _initFirebaseSdk = Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  final _navigatorKey = GlobalKey<NavigatorState>();
 
   // This widget is the root of your application.
   @override
@@ -56,158 +49,31 @@ class ImBusyApp extends StatelessWidget {
           supportedLocales: const [
             Locale('en', ''),
           ],
-          home: const HomePage(),
+          navigatorKey: _navigatorKey,
+          routes: {
+            HomePage.routeName: (BuildContext context) => const HomePage(),
+            LoginPage.routeName: (BuildContext context) => const LoginPage(),
+          },
+          home: FutureBuilder(
+            future: _initFirebaseSdk,
+            builder: (_, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                // Assign listener after the SDK is initialized successfully
+                FirebaseAuth.instance.authStateChanges().listen((User? user) {
+                  if (user == null) {
+                    _navigatorKey.currentState!
+                        .pushReplacementNamed(LoginPage.routeName);
+                  } else {
+                    _navigatorKey.currentState!
+                        .pushReplacementNamed(HomePage.routeName);
+                  }
+                });
+              }
+              return const Text("loading..."); // TODO: Add loading screen
+            },
+          ),
         );
       },
-    );
-  }
-}
-
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0;
-
-  User? _user;
-
-  @override
-  Widget build(BuildContext context) {
-    Faker faker = Faker();
-
-    ThemeData theme = Theme.of(context);
-    ColorScheme colorScheme = theme.colorScheme;
-
-    AppLocalizations localizations = AppLocalizations.of(context)!;
-
-    DateTime now = DateTime.now();
-
-    EventData eventData = EventData(
-      name: "Event Name",
-      members: List.generate(
-        4,
-        (index) => MemberData(
-          name: faker.person.name(),
-          confirmationState: index == 0
-              ? ConfirmationState.confirmed
-              : ConfirmationState
-                  .values[random(0, ConfirmationState.values.length)],
-          role: index == 0 ? Role.organizer : Role.member,
-          profileUri: "",
-        ),
-      ),
-      busyDates: List.generate(
-        random(1, 10),
-        (_) {
-          DateTime start = DateTime(now.year, now.month, random(0, 30));
-          return BusyDates(
-            start: start,
-            end: start.add(Duration(days: random(0, 5))),
-            userUid: faker.guid.guid(),
-          );
-        },
-      ),
-    );
-
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      setState(() {
-        _user = user;
-      });
-
-      if (kDebugMode) {
-        if (user == null) {
-          print('User is currently signed out!');
-        } else {
-          print('User is signed in!');
-        }
-      }
-    });
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("I'm Busy"),
-        backgroundColor: colorScheme.surfaceVariant,
-        foregroundColor: colorScheme.onSurfaceVariant,
-        centerTitle: true,
-      ),
-      bottomSheet: footer(context),
-      body: Row(
-        children: _user != null
-            ? <Widget>[
-                NavigationRail(
-                  selectedIndex: _selectedIndex,
-                  onDestinationSelected: (int index) {
-                    setState(() {
-                      _selectedIndex = index;
-                    });
-                  },
-                  labelType: NavigationRailLabelType.selected,
-                  leading: FloatingActionButton(
-                    onPressed: () {},
-                    child: const Icon(Icons.add_rounded),
-                  ),
-                  destinations: <NavigationRailDestination>[
-                    NavigationRailDestination(
-                      icon: const Icon(Icons.calendar_today_outlined),
-                      selectedIcon: const Icon(Icons.calendar_today_rounded),
-                      label: Text(localizations.menu_calendar),
-                    ),
-                    NavigationRailDestination(
-                      icon: const Icon(Icons.people_alt_outlined),
-                      selectedIcon: const Icon(Icons.people_alt),
-                      label: Text(localizations.menu_members),
-                    ),
-                    NavigationRailDestination(
-                      icon: const Icon(Icons.dashboard_outlined),
-                      selectedIcon: const Icon(Icons.dashboard),
-                      label: Text(localizations.menu_summary),
-                    ),
-                    NavigationRailDestination(
-                      icon: const Icon(Icons.settings_outlined),
-                      selectedIcon: const Icon(Icons.settings),
-                      label: Text(localizations.menu_settings),
-                    ),
-                  ],
-                ),
-                const VerticalDivider(thickness: 1, width: 1),
-                // This is the main content.
-                Expanded(
-                  child: Center(
-                    child: _selectedIndex == 0
-                        ? TableCalendar<BusyDates>(
-                            firstDay: now,
-                            lastDay: DateTime.utc(now.year + 10, 12, 31),
-                            focusedDay: now,
-                            eventLoader: (day) {
-                              List<BusyDates> list = [];
-                              for (var element in eventData.busyDates) {
-                                if (element.start.day == day.day &&
-                                    element.start.month == day.month) {
-                                  list.add(element);
-                                }
-                              }
-                              return list;
-                            },
-                          )
-                        : const Text("Sup?"),
-                  ),
-                ),
-                if (_selectedIndex == 0)
-                  RightPanel(
-                    event: eventData,
-                  ),
-              ]
-            : <Widget>[
-                // When the user is not logged in
-                const Expanded(
-                  child: Center(child: LoginForm()),
-                ),
-              ],
-      ),
     );
   }
 }
