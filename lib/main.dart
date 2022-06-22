@@ -33,6 +33,7 @@ class _ImBusyAppState extends State<ImBusyApp> {
     return DynamicColorBuilder(
       builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: "I'm Busy",
           theme: ThemeData(
             colorScheme: lightDynamic,
@@ -50,17 +51,27 @@ class _ImBusyAppState extends State<ImBusyApp> {
             Locale('en', ''),
           ],
           navigatorKey: _navigatorKey,
+          initialRoute: LoginPage.routeName,
           routes: {
-            HomePage.routeName: (BuildContext context) => const HomePage(),
             LoginPage.routeName: (BuildContext context) => const LoginPage(),
+            HomePage.routeName: (BuildContext context) => const HomePage(),
           },
           home: FutureBuilder(
             future: _initFirebaseSdk,
             builder: (_, snapshot) {
+              if (snapshot.hasError) {
+                return Text(
+                    "Could not load Firebase. Error: ${snapshot.error}");
+              }
+
               if (snapshot.connectionState == ConnectionState.done) {
                 // Assign listener after the SDK is initialized successfully
                 FirebaseAuth.instance.authStateChanges().listen(
-                  (User? user) {
+                  (User? _) {
+                    User? user = FirebaseAuth.instance.currentUser;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('User is null: ${user == null}')),
+                    );
                     if (user == null) {
                       _navigatorKey.currentState!
                           .pushReplacementNamed(LoginPage.routeName);

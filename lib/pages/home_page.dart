@@ -22,7 +22,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final User _user = FirebaseAuth.instance.currentUser!;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final User? _user = FirebaseAuth.instance.currentUser;
 
   int _selectedIndex = 0;
 
@@ -63,6 +64,39 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  Future<void> _showLogOutDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Sign out'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('Are you sure that you want to log out?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Log Out'),
+              onPressed: () {
+                auth.signOut();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
@@ -79,8 +113,10 @@ class _HomePageState extends State<HomePage> {
         foregroundColor: colorScheme.onSurfaceVariant,
         centerTitle: true,
         actions: [
-          if (_user.photoURL != null)
-            IconButton(onPressed: () {}, icon: Image.network(_user.photoURL!))
+          if (_user?.photoURL != null)
+            IconButton(
+                onPressed: _showLogOutDialog,
+                icon: Image.network(_user!.photoURL!))
         ],
       ),
       bottomSheet: footer(context),
