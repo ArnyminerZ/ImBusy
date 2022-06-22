@@ -39,6 +39,7 @@ dependencies:
   faker: ^2.0.0
   table_calendar: ^3.0.6
   intl: ^0.17.0
+  sprintf: ^6.0.0
 
 dev_dependencies:
   flutter_test:
