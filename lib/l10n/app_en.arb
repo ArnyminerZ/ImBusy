@@ -30,5 +30,13 @@
   "event_reference_code": "Reference code: %s",
   "@event_reference_code": {
     "description": "Used for showing the user the reference code of a specific event."
+  },
+  "role_organizer": "Organizer",
+  "@role_organizer": {
+    "description": "Represents the role of the member that created the event."
+  },
+  "role_member": "Member",
+  "@role_member": {
+    "description": "Represents the role of the member that was invited to the event."
   }
 }

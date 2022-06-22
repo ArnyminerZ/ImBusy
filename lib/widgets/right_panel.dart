@@ -47,9 +47,7 @@ class _RightPanelState extends State<RightPanel> {
                     style: textTheme.labelLarge,
                   ),
                   ...event.members.map(
-                    (member) => MemberItem(
-                      member: member,
-                    ),
+                    (member) => memberItem(context, member),
                   ),
                 ],
               ),
