@@ -889,6 +889,5 @@ DerivedData/
 
 ### Personal Ignores
 # Ignore the configuration file since it includes sensitive information
-lib/firebase_options.dart
 ios/firebase_app_id_file.json
 android/app/google-services.json
