@@ -14,5 +14,21 @@
   "menu_settings": "Settings",
   "@menu_settings": {
     "description": "The menu item that chooses the event settings page."
+  },
+  "footer_author": "Made with ❤️ by Arnau Mora",
+  "@footer_author": {
+    "description": "A footer message showing the author of the website."
+  },
+  "footer_copyright": "© 2022 ArnyminerZ",
+  "@footer_copyright": {
+    "description": "A footer message showing the copyright notification."
+  },
+  "panel_title_members": "Members",
+  "@panel_title_members": {
+    "description": "The title of the section that shows some members of the event in the right side of the calendar in desktop."
+  },
+  "event_reference_code": "Reference code: %s",
+  "@event_reference_code": {
+    "description": "Used for showing the user the reference code of a specific event."
   }
 }
