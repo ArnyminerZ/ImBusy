@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Widget footer(BuildContext context) {
   ThemeData theme = Theme.of(context);
   ColorScheme colorScheme = theme.colorScheme;
   TextTheme textTheme = theme.textTheme;
+
+  AppLocalizations localizations = AppLocalizations.of(context)!;
 
   return DecoratedBox(
     decoration: BoxDecoration(
@@ -15,12 +18,12 @@ Widget footer(BuildContext context) {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Made with ❤️ by Arnau Mora",
+            localizations.footer_author,
             style: textTheme.labelLarge,
           ),
           const SizedBox(width: 12),
           Text(
-            "© 2022 ArnyminerZ",
+            localizations.footer_copyright,
             style: textTheme.labelLarge,
           ),
         ],
