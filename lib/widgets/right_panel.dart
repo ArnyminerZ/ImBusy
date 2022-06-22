@@ -1,4 +1,3 @@
-import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:imbusy_app/data/event_data.dart';
@@ -17,8 +16,6 @@ class RightPanel extends StatefulWidget {
 class _RightPanelState extends State<RightPanel> {
   @override
   Widget build(BuildContext context) {
-    Faker faker = Faker();
-
     ThemeData theme = Theme.of(context);
     TextTheme textTheme = theme.textTheme;
 
