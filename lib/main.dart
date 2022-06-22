@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:faker/faker.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -12,13 +13,18 @@ import 'package:imbusy_app/enum/confirmation_state.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'components/footer.dart';
+import 'firebase_options.dart';
 import 'widgets/right_panel.dart';
 
 int random(min, max) {
   return min + Random().nextInt(max - min);
 }
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const ImBusyApp());
 }
 
