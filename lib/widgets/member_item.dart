@@ -25,38 +25,45 @@ Widget _memberItemText(bool isTitle, MemberData memberData, BuildContext ctx) {
   );
 }
 
-Widget memberItem(BuildContext context, MemberData memberData) => Card(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(20.0)),
-      ),
-      child: Row(
-        children: [
-          // Profile image
-          // TODO: Load profile image
-          Positioned(
-            child: Container(
-              height: 40.0,
-              width: 40.0,
-              margin: const EdgeInsets.all(5),
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.green,
-              ),
+Widget memberItem(BuildContext context, MemberData memberData) {
+  AppLocalizations localizations = AppLocalizations.of(context)!;
+
+  return Card(
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+    ),
+    child: Row(
+      children: [
+// Profile image
+// TODO: Load profile image
+        Positioned(
+          child: Container(
+            height: 40.0,
+            width: 40.0,
+            margin: const EdgeInsets.all(5),
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.green,
             ),
           ),
-          const SizedBox(width: 8),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _memberItemText(true, memberData, context),
-              _memberItemText(false, memberData, context),
-            ],
-          ),
-          const Spacer(),
-          Padding(
+        ),
+        const SizedBox(width: 8),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _memberItemText(true, memberData, context),
+            _memberItemText(false, memberData, context),
+          ],
+        ),
+        const Spacer(),
+        Tooltip(
+          message: memberData.confirmationState.name(localizations),
+          child: Padding(
             padding: const EdgeInsets.only(right: 8),
             child: Icon(memberData.confirmationState.icon()),
           ),
-        ],
-      ),
-    );
+        )
+      ],
+    ),
+  );
+}

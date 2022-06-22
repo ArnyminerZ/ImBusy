@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 enum ConfirmationState {
   confirmed,
@@ -7,14 +8,14 @@ enum ConfirmationState {
 }
 
 extension ConfirmationStateExtension on ConfirmationState {
-  String name() {
+  String name(AppLocalizations localizations) {
     switch (this) {
       case ConfirmationState.confirmed:
-        return "Confirmed";
+        return localizations.confirmation_confirmed;
       case ConfirmationState.unconfirmed:
-        return "Unconfirmed";
+        return localizations.confirmation_unconfirmed;
       case ConfirmationState.denied:
-        return "Won't come";
+        return localizations.confirmation_denied;
     }
   }
 

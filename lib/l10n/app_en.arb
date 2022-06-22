@@ -38,5 +38,17 @@
   "role_member": "Member",
   "@role_member": {
     "description": "Represents the role of the member that was invited to the event."
+  },
+  "confirmation_confirmed": "Confirmed",
+  "@confirmation_confirmed": {
+    "description": "Represents the confirmation state of someone that has manually accepted to attend the event."
+  },
+  "confirmation_denied": "Won't Come",
+  "@confirmation_denied": {
+    "description": "Represents the confirmation state of someone that has manually rejected to attend the event."
+  },
+  "confirmation_unconfirmed": "Unconfirmed",
+  "@confirmation_unconfirmed": {
+    "description": "Represents the confirmation state of someone that has still not given any answer on his/her attendance to the event."
   }
 }
