@@ -57,6 +57,9 @@ class _RightPanelState extends State<RightPanel> {
               Text(
                 localizations.event_reference_code.format(["xxx"]),
                 style: textTheme.labelSmall,
+              ),
+              const SizedBox(
+                height: 38,
               )
             ],
           ),
