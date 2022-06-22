@@ -5,6 +5,8 @@ import 'package:imbusy_app/firebase/auth.dart';
 import 'package:imbusy_app/utils/string.dart';
 
 class LoginPage extends StatefulWidget {
+  static const String routeName = "Login";
+
   const LoginPage({super.key});
 
   @override
