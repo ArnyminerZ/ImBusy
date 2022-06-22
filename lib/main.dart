@@ -59,15 +59,17 @@ class _ImBusyAppState extends State<ImBusyApp> {
             builder: (_, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 // Assign listener after the SDK is initialized successfully
-                FirebaseAuth.instance.authStateChanges().listen((User? user) {
-                  if (user == null) {
-                    _navigatorKey.currentState!
-                        .pushReplacementNamed(LoginPage.routeName);
-                  } else {
-                    _navigatorKey.currentState!
-                        .pushReplacementNamed(HomePage.routeName);
-                  }
-                });
+                FirebaseAuth.instance.authStateChanges().listen(
+                  (User? user) {
+                    if (user == null) {
+                      _navigatorKey.currentState!
+                          .pushReplacementNamed(LoginPage.routeName);
+                    } else {
+                      _navigatorKey.currentState!
+                          .pushReplacementNamed(HomePage.routeName);
+                    }
+                  },
+                );
               }
               return const Text("loading..."); // TODO: Add loading screen
             },
