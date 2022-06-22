@@ -151,26 +151,29 @@ class _HomePageState extends State<HomePage> {
           // This is the main content.
           Expanded(
             child: Center(
-              child: TableCalendar<BusyDates>(
-                firstDay: now,
-                lastDay: DateTime.utc(now.year + 10, 12, 31),
-                focusedDay: now,
-                eventLoader: (day) {
-                  List<BusyDates> list = [];
-                  for (var element in eventData.busyDates) {
-                    if (element.start.day == day.day &&
-                        element.start.month == day.month) {
-                      list.add(element);
-                    }
-                  }
-                  return list;
-                },
-              ),
+              child: _selectedIndex == 0
+                  ? TableCalendar<BusyDates>(
+                      firstDay: now,
+                      lastDay: DateTime.utc(now.year + 10, 12, 31),
+                      focusedDay: now,
+                      eventLoader: (day) {
+                        List<BusyDates> list = [];
+                        for (var element in eventData.busyDates) {
+                          if (element.start.day == day.day &&
+                              element.start.month == day.month) {
+                            list.add(element);
+                          }
+                        }
+                        return list;
+                      },
+                    )
+                  : const Text("Sup?"),
             ),
           ),
-          RightPanel(
-            event: eventData,
-          ),
+          if (_selectedIndex == 0)
+            RightPanel(
+              event: eventData,
+            ),
         ],
       ),
     );
