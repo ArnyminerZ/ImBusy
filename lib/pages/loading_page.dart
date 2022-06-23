@@ -6,9 +6,12 @@ class LoadingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
-        Text("Loading..."),
-      ]),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          Text("Loading..."),
+        ],
+      ),
     );
   }
 }
