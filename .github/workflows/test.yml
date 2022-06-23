@@ -23,6 +23,8 @@ jobs:
       - name: Prepare firebase_app_id_file.json
         run: |
           echo '${{ secrets.FIREBASE_APP_ID_FILE_JSON }}' >> ios/firebase_app_id_file.json
+      - name: Update Flutter
+        run: flutter upgrade
       - name: Restore packages
         run: flutter pub get
       - name: Analyze
